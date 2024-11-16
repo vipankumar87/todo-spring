@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 //import org.springframework.web.bind.annotation.RequestMapping;
 //import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.rudra.todo.model.Todo;
 //import com.rudra.todo.model.Todo;
@@ -32,12 +33,12 @@ public class TodoController{
 		return "viewTodoList";
 	}
 	
-	@PostMapping("/updateStatus/{id}")
+	@GetMapping("/updateStatus/{id}")
 	public String updateTodoStatus(@PathVariable Long id) {
 		if(svc.updateStatus(id, "updated") != null) {
-			return "redirect:/viewTodoList";
+			return "redirect:/todo/viewTodoList";
 		}
-		return "redirect:/viewTodoList";
+		return "redirect:/todo/viewTodoList";
 	}
 	@GetMapping({"/addToDoItem", "addToDoItem"})
 	public String addToDoItem(Model model) {
@@ -45,5 +46,46 @@ public class TodoController{
 		
 		return "addToDoItem";
 	}
+	
+	@PostMapping("/saveToDoItem")
+	public String saveToDoItem(Todo todo, RedirectAttributes redirectAttributes) {
+		if(svc.saveOrUpdate(todo) != null) {
+			redirectAttributes.addFlashAttribute("message", "Saved successfully");
+			return "redirect:/viewTodoList";
+		}
+		redirectAttributes.addFlashAttribute("message", "Saved failed");
+		return "redirect:/addToDoItem";
+	}
+	@GetMapping("/editToDoItem/{id}")
+	public String editToDoItem(@PathVariable Long id, Model model) {
+		model.addAttribute("todo", svc.getById(id));
+		
+		return "EditToDoItem";
+	}
 
+	@PostMapping("/editSaveToDoItem")
+	public String editSaveToDoItem(Todo todo, RedirectAttributes redirectAttributes) {
+		if(svc.saveOrUpdate(todo) != null) {
+			redirectAttributes.addFlashAttribute("message", "Edit Success");
+			return "redirect:/viewToDoList";
+		}
+		
+		redirectAttributes.addFlashAttribute("message", "Edit Failure");
+		return "redirect:/editToDoItem/" + todo.getId();
+	}
+	
+	@GetMapping("/deleteToDoItem/{id}")
+	public String deleteToDoItem(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+		try {
+			if (svc.delete(id)) {
+				redirectAttributes.addFlashAttribute("message", "Delete Success");
+				return "redirect:/viewTodoList";
+			}
+			redirectAttributes.addFlashAttribute("message", "Delete Failure");
+						
+		} catch(Exception e) {
+			redirectAttributes.addFlashAttribute("message", "Delete Failure "+ e.getMessage());
+		}
+		return "redirect:/viewTodoList";
+	}
 }

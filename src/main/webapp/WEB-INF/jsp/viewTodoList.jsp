@@ -2,37 +2,12 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-
 <!DOCTYPE html>
-
 <head>
-    <meta charset="ISO-8859-1">
-    <title>View ToDo Item List</title>
-
-    <link rel="stylesheet"
-        	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-        <script
-        	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script
-        	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        <script
-            src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
-    <style>
-        a{
-            color: white;
-        }
-        a:hover {
-            color: white;
-            text-decoration: none;
-        }
-    </style>
-
+    <%@ include file="/WEB-INF/jsp/fragments/head.jsp" %>
 </head>
 <body>
+    <%@ include file="/WEB-INF/jsp/fragments/header.jsp" %>
 
     <div class="container">
 
@@ -58,13 +33,13 @@
                 		<td>${todo.date}</td>
                 		<td>${todo.status}</td>
                 		<td><button type="button" class="btn btn-success">
-                		    <a href="/updateToDoStatus/${todo.id}">Mark Complete</a>
+                		    <a href="${pageContext.request.contextPath}/updateToDoStatus/${todo.id}">Mark Complete</a>
                 		</button></td>
                 		<td><button type="button" class="btn btn-primary">
-                		    <a href="/editToDoItem/${todo.id}">Edit</a>
+                		    <a href="${pageContext.request.contextPath}/editToDoItem/${todo.id}">Edit</a>
                 		</button></td>
                 		<td><button type="button" class="btn btn-danger">
-                			<a href="/deleteToDoItem/${todo.id}">Delete</a>
+                			<a href="${pageContext.request.contextPath}/deleteToDoItem/${todo.id}">Delete</a>
                 		</button></td>
                 	</tr>
 
@@ -75,7 +50,7 @@
         </form:form>
 
         <button type="button" class="btn btn-primary btn-block">
-        	<a href="<spring:url value='/addToDoItem' />">Add New ToDo Item</a>
+        	<a href="${pageContext.request.contextPath}/addToDoItem">Add New ToDo Item</a>
         </button>
 
     </div>
@@ -113,7 +88,6 @@
                         }
         	    }
             </script>
-
+    <%@ include file="/WEB-INF/jsp/fragments/footer.jsp" %>
 </body>
-
 </html>
